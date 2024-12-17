@@ -28,7 +28,13 @@ def Recognize_speech():
 
             global current_recognized_text
             try:
-                text = recognizer.recognize_google(audio, language='eng-ENG')
+                global current_recognizer
+                print(current_recognizer)
+
+                if (current_recognizer == "Google"):
+                    text = recognizer.recognize_google(audio, language='eng-ENG')
+                elif (current_recognizer == "Sphinx"):
+                    text = recognizer.recognize_sphinx(audio)
                 print("Вы сказали: " + text)
                 current_recognized_text = text
 
@@ -77,6 +83,16 @@ if __name__ == "__main__":
     microphone_thread = threading.Thread(target=Recognize_speech)
     microphone_thread.start()
 
+    button_google = pygame.Rect(0,0,120,60)
+    button_google.midtop = (100, 520)
+    text_google = "Google"
+   
+    button_sphinx = pygame.Rect(0,0,120,60)
+    button_sphinx.midtop = (700, 520)
+    text_sphinx = "Sphinx"
+
+    global current_recognizer
+    current_recognizer = "Google"
     while is_running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -84,6 +100,19 @@ if __name__ == "__main__":
                 global is_listening
                 is_listening = False
                 break
+            
+
+            if button_google.collidepoint(pygame.mouse.get_pos()):
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    current_recognizer = "Google"
+                    print("CLICK on Google")
+                    break
+
+            if button_sphinx.collidepoint(pygame.mouse.get_pos()):
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    current_recognizer = "Sphinx"
+                    print("CLICK on Sphinx")
+                    break
 
         said_text_surface = font.render('You said: ' + ('Can not recongnize' if (current_recognized_text == "None") else current_recognized_text), False, WHITE)
 
@@ -97,7 +126,18 @@ if __name__ == "__main__":
         screen.blit(say_color_surface, (200, 500))
         screen.blit(said_text_surface, (200, 550))
 
-        screen.blit(baloon, (300, 70))
+        screen.blit(baloon, (320, 70))
+
+        pygame.draw.rect(screen, WHITE, button_google)
+        text = font.render(text_google, False, BLACK)
+        pos = text.get_rect(center = button_google.center)
+        screen.blit(text, pos)
+
+        pygame.draw.rect(screen, WHITE, button_sphinx)
+        text = font.render(text_sphinx, False, BLACK)
+        pos = text.get_rect(center = button_sphinx.center)
+        screen.blit(text, pos)
+
 
         pygame.display.flip()
 
