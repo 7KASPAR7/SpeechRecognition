@@ -14,6 +14,7 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+BUTTON_BG = (173, 216, 230)
 
 current_recognized_text = "None"
 
@@ -92,7 +93,8 @@ if __name__ == "__main__":
     text_sphinx = "Sphinx"
 
     global current_recognizer
-    current_recognizer = "Google"
+    current_recognizer = text_google
+
     while is_running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -128,12 +130,12 @@ if __name__ == "__main__":
 
         screen.blit(baloon, (320, 70))
 
-        pygame.draw.rect(screen, WHITE, button_google)
+        pygame.draw.rect(screen, BUTTON_BG if current_recognizer == text_google else WHITE, button_google)
         text = font.render(text_google, False, BLACK)
         pos = text.get_rect(center = button_google.center)
         screen.blit(text, pos)
 
-        pygame.draw.rect(screen, WHITE, button_sphinx)
+        pygame.draw.rect(screen, BUTTON_BG if current_recognizer == text_sphinx else WHITE , button_sphinx)
         text = font.render(text_sphinx, False, BLACK)
         pos = text.get_rect(center = button_sphinx.center)
         screen.blit(text, pos)
